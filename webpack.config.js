@@ -26,7 +26,7 @@ module.exports = {
 			exclude: /node_modules/,
 			loader: 'babel',
 			query: {
-				presets: ['es2015']
+				presets: ['react', 'es2015']
 			}
 		},
 		{
@@ -41,6 +41,11 @@ module.exports = {
 		}
 		]
 	},
+	externals: {
+		'react/addons': true,
+		'react/lib/ExecutionEnvironment': true,
+		'react/lib/ReactContext': true
+	}
 	devServer: {
 		inline: true,
 		host: host,
