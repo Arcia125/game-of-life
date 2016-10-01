@@ -1,13 +1,9 @@
 var webpack = require('webpack');
 var path = require('path');
-var OpenBrowserPlugin = require('open-browser-webpack-plugin');
-var host = 'localhost';
-var port = 8001;
 
 module.exports = {
 	context: path.join(__dirname, 'src'),
 	entry: {
-		main: './main.js'
 	},
 	output: {
 		filename: '[name].js',
@@ -46,13 +42,8 @@ module.exports = {
 	// 	'react/lib/ExecutionEnvironment': true,
 	// 	'react/lib/ReactContext': true
 	// },
-	devServer: {
-		inline: true,
-		host: host,
-		port: port
-	},
 	devtool: 'source-map',
-	plugins: [
-		new OpenBrowserPlugin({ url: 'http://' + host + ':' + port})
-	]
+	// plugins: [
+	// 	new OpenBrowserPlugin({ url: 'http://' + host + ':' + port})
+	// ]
 }
