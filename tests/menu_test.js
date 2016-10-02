@@ -4,43 +4,47 @@ const TestUtils = require('react-addons-test-utils');
 import Menu from '../src/app/components/menu';
 
 describe('The Menu component', () => {
-  var renderer, menu;
-  beforeEach(() => {
-    renderer = TestUtils.createRenderer();
+    var renderer, menu, component;
+    beforeEach(() => {
+        renderer = TestUtils.createRenderer();
 
-    renderer.render(
-      <Menu className='test'>
-      <div>
-      </div>
-      </Menu>
-      );
+        renderer.render(
+          <Menu className='test' >
+            <div >
+            </div>
+            </Menu>
+        );
 
-    menu = renderer.getRenderOutput();
-  });
+        menu = renderer.getRenderOutput();
+    });
 
-  afterEach(() => {
-    renderer = '';
-    menu = '';
-  });
+    afterEach(() => {
+      renderer = '';
+      menu = '';
+    });
 
-  it('renders', () => {
-    expect(menu).to.exist;
-  });
+    it('renders', () => {
+      expect(menu).to.exist;
+      expect(menu.type).to.equal('div');
+    });
 
-  it('has the className menu', () => {
-    expect(menu.props.className).to.include('menu');
-  });
+    it('includes the className menu', () => {
+      expect(menu.props.className).to.include('menu');
+    });
 
-  it('should not have the className undefined', () => {
-    renderer.render(
-      <Menu/>);
-    menu = renderer.getRenderOutput();
-    expect(menu.props.className).to.not.include(undefined);
-  });
+    it('does not include the className undefined', () => {
+      renderer.render( < Menu / > );
+      menu = renderer.getRenderOutput();
+      expect(menu.props.className).to.not.include(undefined);
+    });
 
-  it('should include classes passed to parent', () => {
-    expect(menu.props.className).to.include('test');
-  });
+    it('includes classes passed to it as className props', () => {
+      expect(menu.props.className).to.include('test');
+    });
+
+    it('renders its children', () => {
+      expect(menu.props.children).to.exist; 
+    });
 
 
 });

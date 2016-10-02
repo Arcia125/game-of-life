@@ -2,9 +2,15 @@ const React = require('react');
 
 class Button extends React.Component {
 	render() {
-		let classes = this.props.className + ' react-button';
+		let props = this.props;
+		let classes = [];
+		if (props.className) {
+			classes.push(props.className);
+		}
+		classes.push('react-button');
 		return (
-			<button className={classes} >
+			<button onClick={props.onClick} className={classes.join(' ')} >
+				{props.children}
 			</button>
 			);
 	}

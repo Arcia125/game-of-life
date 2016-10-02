@@ -4,13 +4,15 @@ const React = require('react');
 
 class Menu extends React.Component {
 	render() {
+		let props = this.props;
 		let classes = [];
-		if (this.props.className) {
-			classes.push(this.props.className);
+		if (props.className) {
+			classes.push(props.className);
 		}
 		classes.push('menu');
 		return(
 		<div className={classes.join(' ')}>
+			{props.children}
 		</div>
 		);
 	}

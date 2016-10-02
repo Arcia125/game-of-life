@@ -6,7 +6,7 @@ const TestUtils = require('react-addons-test-utils');
 import App from '../src/app/app';
 
 describe('The App component', () => {
-  var renderer, app;
+  var renderer, app, component;
   beforeEach(() => {
     renderer = TestUtils.createRenderer();
 
@@ -15,9 +15,6 @@ describe('The App component', () => {
       );
 
     app = renderer.getRenderOutput();
-
-
-
   });
 
   it('renders', () => {
