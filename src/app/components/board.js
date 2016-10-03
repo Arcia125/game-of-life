@@ -9,15 +9,20 @@ function makeNeighbor(y, x) {
 }
 
 
+
+
 class Board extends React.Component {
 	componentWillMount() {
-		let board = this.initBoardState(10);
+		let board = this.initBoardState(this.props.seed);
 		this.state = {
 			board: board,
-			speed: this.props.speed
+			speed: this.props.speed,
+			running: this.props.running,
+			clear: this.props.clear,
+			seed: this.props.seed
 		};
 	}
-
+	
 	initBoardState(seed) {
 		let y = 0;
 		let x = 0;
@@ -28,7 +33,7 @@ class Board extends React.Component {
 		for (y = 0; y < size; y++) {
 			row = [];
 			for (x = 0; x < size; x++) {
-				rand = Math.floor((Math.random() * seed) + 1);
+				rand = Math.floor(Math.random() * seed);
 				if (rand % 2 === 0 || rand % 3 === 0) {
 					row.push(0);
 				} else {
@@ -41,7 +46,9 @@ class Board extends React.Component {
 	}
 
 	componentDidMount() {
-		setInterval(this.getNextGeneration.bind(this), this.state.speed);
+		this.setState({
+			interval: setInterval(this.getNextGeneration.bind(this), this.state.speed)
+		});
 	}
 
 	getNeighbors(centerX, centerY) {
@@ -158,6 +165,30 @@ class Board extends React.Component {
 						);
 		}
 		return rows;
+	}
+	componentWillUpdate(props, state) {
+		if ((props.running === false && state.interval !== null)) {
+			clearInterval(state.interval);
+			this.setState({
+				interval: null,
+				running: false
+			});
+		} else if (props.running === true && state.interval === null) {
+			this.setState({
+				interval: setInterval(this.getNextGeneration.bind(this), this.state.speed),
+				running: true
+			});
+		}
+		// if (props.clear === true) {
+		// 	if (props.running === true) {
+		// 		alert('Pause before clearing');
+		// 	} else {
+		// 	this.setState({
+		// 		board: this.initBoardState(0)
+		// 	});
+		// 	}
+		// }
+		// console.log(state);
 	}
 	render() {
 		let props = this.props;

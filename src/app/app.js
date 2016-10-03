@@ -8,17 +8,30 @@ export default class App extends React.Component {
 	componentWillMount() {
 		this.state = {
 			running: true,
-			speed: '50'
+			speed: '50',
+			clear: false,
+			seed: 10
 		}
 	}
 	handleRun() {
-		console.log('clicked run');
+		this.setState({
+			running: true
+		});
 	}
 	handlePause() {
-		console.log('clicked pause');
+		this.setState({
+			running: false
+		});
 	}
 	handleClear() {
-		console.log('clicked clear');
+		this.setState({
+			clear: true
+		});
+		setTimeout(() => {
+			this.setState({
+				clear: false
+			});
+		}, 50);
 	}
 	render() {
 		return (
@@ -28,7 +41,13 @@ export default class App extends React.Component {
 					<Button onClick={() => this.handlePause()} className='pause-button' >Pause</Button>
 					<Button onClick={() => this.handleClear()} className='clear-button' >Clear</Button>
 				</Menu>
-				<Board size='40' speed={this.state.speed} />
+				<Board
+				size='60'
+				speed={this.state.speed}
+				running={this.state.running}
+				clear={this.state.clear}
+				seed={this.state.seed}
+				 />
 
 			</div>
 		);
