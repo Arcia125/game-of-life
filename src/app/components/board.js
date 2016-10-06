@@ -15,14 +15,9 @@ class Board extends React.Component {
 	componentWillMount() {
 		let board = this.initBoardState(this.props.seed);
 		this.state = {
-			board: board,
-			speed: this.props.speed,
-			running: this.props.running,
-			clear: this.props.clear,
-			seed: this.props.seed
+			board: board
 		};
 	}
-	
 	initBoardState(seed) {
 		let y = 0;
 		let x = 0;
@@ -43,12 +38,6 @@ class Board extends React.Component {
 			board.push(row);
 		}
 		return board;
-	}
-
-	componentDidMount() {
-		this.setState({
-			interval: setInterval(this.getNextGeneration.bind(this), this.state.speed)
-		});
 	}
 
 	getNeighbors(centerX, centerY) {
@@ -118,7 +107,7 @@ class Board extends React.Component {
 		let size = this.props.size;
 		let board = [];
 		let row = [];
-		let surv; 
+		let surv;
 		for (y = 0; y < size; y++) {
 			row = [];
 			for (x = 0; x < size; x++) {
@@ -164,36 +153,19 @@ class Board extends React.Component {
 				</CellRow>
 						);
 		}
+		
 		return rows;
 	}
-	componentWillUpdate(props, state) {
-		if ((props.running === false && state.interval !== null)) {
-			clearInterval(state.interval);
-			this.setState({
-				interval: null,
-				running: false
-			});
-		} else if (props.running === true && state.interval === null) {
-			this.setState({
-				interval: setInterval(this.getNextGeneration.bind(this), this.state.speed),
-				running: true
-			});
+
+	componentWillReceiveProps(nextProps) {
+		// if the new properties have a higher generation number
+		// then update the board state with getNextGeneration()
+		if(nextProps.generation > this.props.generation) {
+			this.getNextGeneration();
 		}
-		// if (props.clear === true) {
-		// 	if (props.running === true) {
-		// 		alert('Pause before clearing');
-		// 	} else {
-		// 	this.setState({
-		// 		board: this.initBoardState(0)
-		// 	});
-		// 	}
-		// }
-		// console.log(state);
 	}
+
 	render() {
-		let props = this.props;
-		let rows = [];
-		let cells = [];
 		let gameBoard = this.makeBoard();
 		return (
 			<div className='board'>

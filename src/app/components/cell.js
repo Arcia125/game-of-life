@@ -1,6 +1,9 @@
 const React = require('react');
 
 class Cell extends React.Component {
+  componentWillUnmount() {
+    console.log(this);
+  }
   render() {
     let props = this.props;
 		let classes = [];
