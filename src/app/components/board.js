@@ -24,7 +24,7 @@ class Board extends React.Component {
 			row = [];
 			for (x = 0; x < size; x++) {
 				rand = Math.floor((Math.random() * 10) + 1);
-				if (rand < density) {
+				if (rand < density || density === 0) {
 					row.push(0);
 				} else {
 					row.push(1);
