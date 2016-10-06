@@ -7,13 +7,13 @@ const makeNeighbor = (y, x) => ({x: x, y: y});
 
 class Board extends React.Component {
 	componentWillMount() {
-		let board = this.initBoardState(this.props.seed);
+		let board = this.initBoardState(this.props.density);
 		this.state = {
 			board: board
 		};
 	}
 
-	initBoardState(seed) {
+	initBoardState(density) {
 		let y = 0;
 		let x = 0;
 		let size = this.props.size;
@@ -23,8 +23,8 @@ class Board extends React.Component {
 		for (y = 0; y < size; y++) {
 			row = [];
 			for (x = 0; x < size; x++) {
-				rand = Math.floor(Math.random() * seed);
-				if (rand % 2 === 0 || rand % 3 === 0) {
+				rand = Math.floor((Math.random() * 10) + 1);
+				if (rand < density) {
 					row.push(0);
 				} else {
 					row.push(1);
@@ -36,11 +36,14 @@ class Board extends React.Component {
 	}
 
 	getNeighbors(centerX, centerY) {
-		let board = this.state.board;
+
+		// defines offset variables
 		let north = centerY + 1;
 		let south = centerY - 1;
 		let west = centerX - 1;
 		let east = centerX + 1;
+
+		// sets variables equal to an object {y: arg1, x: arg2}
 		let nw = makeNeighbor(north, west);
 		let n = makeNeighbor(north, centerX);
 		let ne = makeNeighbor(north, east);
@@ -49,6 +52,9 @@ class Board extends React.Component {
 		let sw = makeNeighbor(south, west);
 		let s = makeNeighbor(south, centerX);
 		let se = makeNeighbor(south, east);
+
+		// returns an array of neighbors
+		// neighbor = {y, x}
 		return [nw, n, ne, w, e, sw, s, se];
 	}
 
@@ -82,8 +88,11 @@ class Board extends React.Component {
 	}
 
 	willSurvive(x, y) {
-		let isAlive = this.cellIsAlive(x, y);
 		let neighborCount = this.countNeighbors(x, y);
+		if (neighborCount > 4 || neighborCount < 2) {
+			return false;
+		}
+		let isAlive = this.cellIsAlive(x, y);
 		let has2Neighbors = neighborCount === 2;
 		let has3Neighbors = neighborCount === 3;
 		let isDead = !isAlive;

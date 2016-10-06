@@ -10,7 +10,7 @@ export default class App extends React.Component {
 			running: true,
 			speed: '10',
 			clear: false,
-			seed: 2,
+			density: 7,
 			generation: 0,
 			interval: null
 		}
@@ -90,7 +90,7 @@ export default class App extends React.Component {
 				</Menu>
 				<Board
 				size='60'
-				seed={this.state.seed}
+				density={this.state.density}
 				clear={this.state.clear}
 				generation={this.state.generation}
 				 />
