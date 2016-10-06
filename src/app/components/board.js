@@ -3,13 +3,7 @@ const React = require('react');
 import CellRow from './cell-row';
 import Cell from './cell';
 
-
-function makeNeighbor(y, x) {
-	return {x: x, y: y};
-}
-
-
-
+const makeNeighbor = (y, x) => ({x: x, y: y});
 
 class Board extends React.Component {
 	componentWillMount() {
@@ -18,6 +12,7 @@ class Board extends React.Component {
 			board: board
 		};
 	}
+
 	initBoardState(seed) {
 		let y = 0;
 		let x = 0;
@@ -153,14 +148,24 @@ class Board extends React.Component {
 				</CellRow>
 						);
 		}
-		
 		return rows;
 	}
 
+	clearBoard() {
+		let emptyBoard = this.initBoardState(0);
+		this.setState({
+			board: emptyBoard
+		});
+	}
+
 	componentWillReceiveProps(nextProps) {
+		if (nextProps.clear === true) {
+			this.clearBoard();
+		}
+
 		// if the new properties have a higher generation number
 		// then update the board state with getNextGeneration()
-		if(nextProps.generation > this.props.generation) {
+		if (nextProps.generation > this.props.generation) {
 			this.getNextGeneration();
 		}
 	}

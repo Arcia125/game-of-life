@@ -1,8 +1,10 @@
 const React = require('react');
 
 class Cell extends React.Component {
-  componentWillUnmount() {
-    console.log(this);
+  shouldComponentUpdate(nextProps) {
+    // only update component if it has a new classname
+    // e.g. cell_dead or cell_alive
+    return nextProps.className !== this.props.className;
   }
   render() {
     let props = this.props;

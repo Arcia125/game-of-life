@@ -8,9 +8,9 @@ export default class App extends React.Component {
 	componentWillMount() {
 		this.state = {
 			running: true,
-			speed: '20',
+			speed: '10',
 			clear: false,
-			seed: 10,
+			seed: 2,
 			generation: 0,
 			interval: null
 		}
@@ -19,7 +19,7 @@ export default class App extends React.Component {
 	createInterval() {
 		// creates a timer that adds one to generation every interval
 		// sets interval delay to this.state.speed
-		let intervalID = setInterval(this.addToGeneration.bind(this), 1);
+		let intervalID = setInterval(this.addToGeneration.bind(this), this.state.speed);
 		return intervalID;
 	}
 

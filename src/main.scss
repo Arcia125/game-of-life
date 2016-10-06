@@ -53,17 +53,19 @@ body {
 	background: #07070f;
 }
 
+$cell_alive-bg: #05C700;
+$cell_alive-bg-new: $cell_alive-bg + #663866;
 .cell_alive {
-	background: #B21525;
+	background: $cell_alive-bg;
 	animation-name: color-change;
-	animation-duration: 100ms;
+	animation-duration: 200ms;
 }
 
 @keyframes color-change {
 	0% {
-		background: green;
+		background: $cell_alive-bg-new;
 	}
 	100% {
-		background: initial;
+		background: $cell_alive-bg;
 	}
 }
