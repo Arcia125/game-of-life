@@ -9,10 +9,10 @@ export default class App extends React.Component {
 		this.state = {
 			size: 40,
 			running: true,
-			speed: '1',
+			speed: '50',
 			clear: false,
 			randomize: false,
-			density: 40,
+			density: 55,
 			generation: 0,
 			interval: null
 		}
