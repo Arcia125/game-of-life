@@ -7,13 +7,13 @@ const makeNeighbor = (y, x) => ({x: x, y: y});
 
 class Board extends React.Component {
 	componentWillMount() {
-		let board = this.initBoardState(this.props.density);
+		let board = this.generateBoard(this.props.density);
 		this.state = {
 			board: board
 		};
 	}
-
-	initBoardState(density) {
+	generateBoard(density) {
+		//density: value 0 - 100
 		let y = 0;
 		let x = 0;
 		let size = this.props.size;
@@ -23,13 +23,20 @@ class Board extends React.Component {
 		for (y = 0; y < size; y++) {
 			row = [];
 			for (x = 0; x < size; x++) {
-				rand = Math.floor((Math.random() * 10) + 1);
-				if (rand < density || density === 0) {
+
+				// random number between 1-10
+				rand = Math.floor((Math.random() * 100) + 1);
+
+				// if random number between 1-10 is greater than density
+				// or density is 0
+				// append 0 (a dead cell) to the row
+				if (rand > density || density === 0) {
 					row.push(0);
 				} else {
 					row.push(1);
 				}
 			}
+			// append the now full row to the board
 			board.push(row);
 		}
 		return board;
@@ -59,6 +66,8 @@ class Board extends React.Component {
 	}
 
 	countNeighbors(centerX, centerY) {
+		// return the numbers of neighbors for a cell
+		// centerX the center cell's x value
 		return this.getNeighbors(centerX, centerY).filter((neighbor) => this.neighborIsAlive(neighbor)).length;
 	}
 
@@ -105,7 +114,7 @@ class Board extends React.Component {
 		}
 	}
 
-	getNextGeneration() {
+	updateBoard() {
 		let y = 0;
 		let x = 0;
 		let size = this.props.size;
@@ -115,7 +124,7 @@ class Board extends React.Component {
 		for (y = 0; y < size; y++) {
 			row = [];
 			for (x = 0; x < size; x++) {
-				surv = this.willSurvive(x, y)
+				surv = this.willSurvive(x, y);
 				row.push(surv ? 1 : 0);
 			}
 			board.push(row);
@@ -132,21 +141,11 @@ class Board extends React.Component {
 		let x = 0;
 		let y = 0;
 		let counter = 0;
-		let board = this.state.board;
-		let cellClass = '';
 		for (y = 0; y < size; y++) {
 			currentRow = [];
 			for (x = 0; x < size; x++) {
 				counter++;
-				currentRow.push(
-					<Cell
-						key={size + counter}
-						cellID={counter}
-						x={x}
-						y={y}
-						className={this.cellIsAlive(x, y) ? 'cell_alive': 'cell_dead'}
-					/>
-					);
+				currentRow.push(this.createCellObj((counter + size), (counter), x, y));
 			}
 			rows.push(
 				<CellRow
@@ -160,10 +159,44 @@ class Board extends React.Component {
 		return rows;
 	}
 
+	handleClick(x, y) {
+		this.toggleBoardAt(x, y);
+	}
+
+	toggleBoardAt(x, y) {
+		// changes the board state variable at a certain location
+		// x: cell x value
+		// y: cell y value
+		let board = this.state.board;
+		let newVal = this.cellIsAlive(x, y) ? 0 : 1;
+		board[y][x] = newVal;
+		this.setState({
+			board: board
+		});
+	}
+
+	createCellObj(key, cellID, x, y) {
+		return (
+			<Cell
+				key={key}
+				cellID={cellID}
+				ref={'cell_' + x + '_' + y}
+				onClick={() => this.handleClick(x, y)}
+				className={this.cellIsAlive(x, y) ? 'cell_alive' : 'cell_dead'}/>
+				);
+	}
+
 	clearBoard() {
-		let emptyBoard = this.initBoardState(0);
+		let emptyBoard = this.generateBoard(0);
 		this.setState({
 			board: emptyBoard
+		});
+	}
+
+	makeRandomBoard() {
+		let randomBoard = this.generateBoard(this.props.density);
+		this.setState({
+			board: randomBoard
 		});
 	}
 
@@ -172,18 +205,23 @@ class Board extends React.Component {
 			this.clearBoard();
 		}
 
-		// if the new properties have a higher generation number
-		// then update the board state with getNextGeneration()
-		if (nextProps.generation > this.props.generation) {
-			this.getNextGeneration();
+		if (nextProps.randomize === true) {
+			this.clearBoard();
+			this.makeRandomBoard();
 		}
+
+		if (nextProps.generation > this.props.generation) {
+			this.updateBoard();
+		}
+
 	}
 
 	render() {
-		let gameBoard = this.makeBoard();
+		// console.log(this.refs);
+		let rows = this.makeBoard();
 		return (
 			<div className='board'>
-				{gameBoard}
+				{rows}
 			</div>
 			);
 	}

@@ -7,10 +7,12 @@ import Board from './components/board';
 export default class App extends React.Component {
 	componentWillMount() {
 		this.state = {
+			size: 40,
 			running: true,
-			speed: '10',
+			speed: '1',
 			clear: false,
-			density: 7,
+			randomize: false,
+			density: 40,
 			generation: 0,
 			interval: null
 		}
@@ -26,6 +28,7 @@ export default class App extends React.Component {
 	removeInterval() {
 		// clears the interval using hte id stored in this.state.interval
 		clearInterval(this.state.interval);
+		return null;
 	}
 
 	componentDidMount() {
@@ -60,10 +63,9 @@ export default class App extends React.Component {
 		// ensures that the running state isn't already false
 		// returns false if hte app is already running
 		if(this.state.running === true) {
-			this.removeInterval();
 			this.setState({
 				running: false,
-				interval: null
+				interval: this.removeInterval()
 			});
 		}else {
 			return false;
@@ -71,12 +73,30 @@ export default class App extends React.Component {
 	}
 
 	handleClear() {
+		this.removeInterval();
 		this.setState({
+			running: false,
+			generation: 0,
+			interval: this.removeInterval(),
 			clear: true
 		});
 		setTimeout(() => {
 			this.setState({
 				clear: false
+			});
+		}, 10);
+	}
+	handleRandom() {
+		this.removeInterval();
+		this.setState({
+			running: false,
+			generation: 0,
+			interval: this.removeInterval(),
+			randomize: true
+		});
+		setTimeout(() => {
+			this.setState({
+				randomize: false
 			});
 		}, 10);
 	}
@@ -89,11 +109,18 @@ export default class App extends React.Component {
 					<Button onClick={() => this.handleClear()} className='clear-button' >Clear</Button>
 				</Menu>
 				<Board
-				size='60'
+				size={this.state.size}
 				density={this.state.density}
 				clear={this.state.clear}
+				randomize={this.state.randomize}
 				generation={this.state.generation}
 				 />
+				 <Menu className='bottom-menu'>
+				 	<Button onClick={() => this.handleRandom()} className='random-button' >Randomize</Button>
+				 	<div className='generation-counter'>
+					Generation: {this.state.generation}
+					</div>
+				 </Menu>
 			</div>
 		);
 	}

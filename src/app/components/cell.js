@@ -6,6 +6,7 @@ class Cell extends React.Component {
     // e.g. cell_dead or cell_alive
     return nextProps.className !== this.props.className;
   }
+
   render() {
     let props = this.props;
 		let classes = [];
@@ -14,7 +15,7 @@ class Cell extends React.Component {
 		}
 		classes.push('cell');
     return (
-      <div id={'cell-' + props.cellID} className={classes.join(' ')} x={props.x} y={props.y}>
+      <div id={'cell-' + props.cellID} x={props.x} y={props.y} onClick={this.props.onClick} className={classes.join(' ')}>
         {props.children}
       </div>
       );
