@@ -72,7 +72,7 @@ body {
 	padding: .3rem .6rem .3rem .6rem;
 	width: 100%;
 	@include desktop {
-		font-size: 1.4rem;
+		font-size: 1rem;
 		width: 10rem;
 	}
 	&:hover {
@@ -91,14 +91,14 @@ body {
 }
 
 .cell {
-	height: 1.2vh;
-	width: 1.2vh;
+	height: .6vh;
+	width: .6vh;
 	border-width: .01rem 0 0 .01rem;
-	border-color: #444;
+	border-color: #333;
 	border-style: solid;
 	@include desktop {
-		height: 1.6vh;
-		width: 1.6vh;
+		height: 1vh;
+		width: 1vh;
 	}
 }
 

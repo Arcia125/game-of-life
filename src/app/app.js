@@ -7,12 +7,12 @@ import Board from './components/board';
 export default class App extends React.Component {
 	componentWillMount() {
 		this.state = {
-			size: 40,
+			size: 60,
 			running: true,
 			speed: '50',
 			clear: false,
 			randomize: false,
-			density: 55,
+			density: 50,
 			generation: 0,
 			interval: null
 		}
