@@ -1,5 +1,11 @@
 @import './utilities/variables';
 
+html {
+	-webkit-font-smoothing: subpixel-antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+}
+
 body {
 	background: rgba(38,223,136,1);
 	background: -moz-radial-gradient(center, rgba(38,223,136,1) 0%, rgba(86,164,124,1) 34%, rgba(53,100,97,1) 86%, rgba(53,100,97,1) 100%);
@@ -9,9 +15,16 @@ body {
 	background: radial-gradient(center, rgba(38,223,136,1) 0%, rgba(86,164,124,1) 34%, rgba(53,100,97,1) 86%, rgba(53,100,97,1) 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#26df88', endColorstr='#356461', GradientType=0 );
 	background-repeat: no-repeat;
-	height: 100vh;
+	min-height: 100vh;
 	font-size: 16px;
 	font-family: sans-serif;
+	margin: 0;
+	overflow-x: hidden;
+	max-width: 100vw;
+	line-height: 1.68;
+	@include desktop {
+		line-height: 1.3;
+	}
 }
 
 .app {
@@ -19,37 +32,126 @@ body {
 	flex-flow: column;
 	justify-content: center;
 	align-items: center;
-	margin-top: 6vh;
+	padding-top: 20vh;
+	@include desktop {
+		padding-top: 12vh;
+	}
 }
 
-.board {
-	margin: auto;
-	border-width: 1vh;
-	border-color: #242424;
-	border-style: solid;
-	border-radius: 1%;
-}
 
 .menu {
 	background: #242424;
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	flex-wrap: wrap;
 	justify-content: space-around;
 	align-items: center;
 	font-size: 1rem;
-	min-width: 60vw;
-	max-width: 90vw;
+	min-width: 10vw;
+	max-width: 60vw;
 	@include desktop {
 		font-size: 2rem;
-		min-width: 30vw;
-		max-width: 50vw;
+		min-width: 10vw;
+		max-width: 45vw;
 		flex-direction: row;
 	}
 }
 
+.info-menu {
+	padding: 1vh 0 0 0;
+	position: absolute;
+	top: 0;
+	width: 100vw;
+	flex-direction: column;
+	max-width: 100vw;
+	@include desktop{
+		max-width: 100vw;
+		flex-direction: column;
+	}
+}
+
+.info-menu_title {
+	margin: 0;
+	color: white;
+	font-size: 1rem;
+	text-align: center;
+	@include desktop {
+		font-size: 1.5rem;
+	}
+}
+
+.info-menu_subtitle {
+	margin: 0;
+	color: #CCC;
+	font-size: .6rem;
+	text-align: center;
+	@include desktop {
+		font-size: .8rem;
+	}
+}
+
+.info-menu_panel {
+	overflow: hidden;
+	height: 0;
+	transition: 0.7s;
+	-webkit-transition-timing-function: cubic-bezier(0.680, 0, 0.265, 1); /* older webkit */
+	-webkit-transition-timing-function: cubic-bezier(0.680, -0.550, 0.265, 1.550);
+	-moz-transition-timing-function: cubic-bezier(0.680, -0.550, 0.265, 1.550);
+	-o-transition-timing-function: cubic-bezier(0.680, -0.550, 0.265, 1.550);
+	transition-timing-function: cubic-bezier(0.680, -0.550, 0.265, 1.550);
+	width: 100vw;
+	&.show {
+		overflow-x: hidden;
+		overflow-y: scroll;
+		background: #343434;
+		height: 60vh;
+		@include desktop {
+			height: 30vh;
+		}
+	}
+}
+
+.info-button {
+	margin: .1rem .4rem 1rem .4rem !important;
+	width: 50vw;
+	@include desktop {
+		width: 15vw;
+	}
+
+}
+
+.panel-content {
+	padding-left: 3rem;
+	padding-right: 3rem;
+	color: white;
+	@include desktop {
+		padding-left: 5rem;
+		padding-right: 5rem;
+	}
+	& a {
+		color: $cell_alive-bg-new;
+		&:hover {
+			opacity: .8;
+		}
+		&:visited {
+			color: $cell_alive-bg;
+		}
+	}
+}
+
+.panel-content_header {
+	font-size: 1.5rem;
+}
+
+.panel-content_para {
+	font-size: 1rem;
+	@include desktop {
+		font-size: 1rem;
+	}
+}
+
 .top-menu {
-	padding: 2vh 2vh .1vh 2vh;
+	padding: 1vh 2vh .1vh 2vh;
 	border-top-left-radius: 1rem;
 	border-top-right-radius: 1rem;
 }
@@ -70,13 +172,11 @@ body {
 	border-width: .1rem;
 	border-style: solid;
 	padding: .3rem .6rem .3rem .6rem;
-	width: 100%;
 	@include desktop {
 		font-size: 1rem;
-		width: 10rem;
 	}
 	&:hover {
-		background: #999;
+		background: #666;
 	}
 }
 
@@ -86,19 +186,26 @@ body {
 	margin: .01rem .4rem .01rem .4rem;
 }
 
+.board {
+	margin: auto;
+	border-width: 1vh;
+	border-color: #242424;
+	border-style: solid;
+	border-radius: 1%;
+}
 .cell-row {
 	display: flex;
 }
 
 .cell {
-	height: .6vh;
-	width: .6vh;
+	height: .2rem;
+	width: .2rem;
 	border-width: .01rem 0 0 .01rem;
-	border-color: #333;
+	border-color: #222;
 	border-style: solid;
 	@include desktop {
-		height: 1vh;
-		width: 1vh;
+		height: .6rem;
+		width: .6rem;
 	}
 }
 
@@ -106,8 +213,6 @@ body {
 	background: #07070f;
 }
 
-$cell_alive-bg: #05C700;
-$cell_alive-bg-new: $cell_alive-bg + #663866;
 .cell_alive {
 	background: $cell_alive-bg;
 	animation-name: color-change;
