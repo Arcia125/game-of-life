@@ -6,8 +6,15 @@ import Board from './components/board';
 
 export default class App extends React.Component {
 	componentWillMount() {
+		let width = window.innerWidth;
+		let boardSize;
+		if (width > 1024) {
+			boardSize = 60;
+		}else if (width < 1024) {
+			boardSize = 40;
+		}
 		this.state = {
-			size: 60,
+			size: boardSize,
 			running: true,
 			speed: '50',
 			clear: false,
