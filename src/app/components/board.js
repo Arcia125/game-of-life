@@ -1,4 +1,4 @@
-const React = require('react');
+import React from 'react';
 
 import CellRow from './cell-row';
 import Cell from './cell';
@@ -16,18 +16,17 @@ class Board extends React.Component {
 		//density: value 0 - 100
 		let y = 0;
 		let x = 0;
-		let size = this.props.size;
-		let board = [];
-		let row = [];
+		const size = this.props.size;
+		const board = [];
 		let rand = 0;
 		for (y = 0; y < size; y++) {
-			row = [];
+			const row = [];
 			for (x = 0; x < size; x++) {
 
-				// random number between 1-10
+				// random number between 1-99
 				rand = Math.floor((Math.random() * 100) + 1);
 
-				// if random number between 1-10 is greater than density
+				// if random number between 1-99 is greater than density
 				// or density is 0
 				// append 0 (a dead cell) to the row
 				if (rand > density || density === 0) {
@@ -73,7 +72,6 @@ class Board extends React.Component {
 
 	neighborIsAlive(neighbor) {
 		let size = this.props.size;
-		let board = this.state.board;
 		let x, y;
 		if (neighbor.x <= 0) {
 			x = size - 1;
@@ -93,25 +91,19 @@ class Board extends React.Component {
 	}
 
 	cellIsAlive(cellX, cellY) {
-		return this.state.board[cellY][cellX] > 0;
+		return this.state.board[cellY][cellX] !== 0;
 	}
 
 	willSurvive(x, y) {
 		let neighborCount = this.countNeighbors(x, y);
-		if (neighborCount > 4 || neighborCount < 2) {
+		if (neighborCount >= 4 || neighborCount < 2) {
 			return false;
 		}
 		let isAlive = this.cellIsAlive(x, y);
-		let has2Neighbors = neighborCount === 2;
-		let has3Neighbors = neighborCount === 3;
-		let isDead = !isAlive;
-		if (isAlive && (has2Neighbors || has3Neighbors)) {
+		if ((isAlive && (neighborCount === 2 || neighborCount === 3)) || (!isAlive && neighborCount === 3)) {
 			return true;
-		} else if (isDead && has3Neighbors) {
-			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	updateBoard() {
@@ -119,12 +111,10 @@ class Board extends React.Component {
 		let x = 0;
 		let size = this.props.size;
 		let board = [];
-		let row = [];
-		let surv;
 		for (y = 0; y < size; y++) {
-			row = [];
+			const row = [];
 			for (x = 0; x < size; x++) {
-				surv = this.willSurvive(x, y);
+				const surv = this.willSurvive(x, y);
 				row.push(surv ? 1 : 0);
 			}
 			board.push(row);
@@ -136,21 +126,17 @@ class Board extends React.Component {
 
 	makeBoard() {
 		let rows = [];
-		let currentRow = [];
 		let size = this.props.size;
 		let x = 0;
 		let y = 0;
-		let counter = 0;
 		for (y = 0; y < size; y++) {
-			currentRow = [];
+			const currentRow = [];
 			for (x = 0; x < size; x++) {
-				counter++;
-				currentRow.push(this.createCellObj((counter + size), (counter), x, y));
+				currentRow.push(this.createCellObj((x + (y * size)), x, y));
 			}
 			rows.push(
 				<CellRow
-					key={y}
-					rowID={y}
+					key={y + (size * size)}
 				>
 					{currentRow}
 				</CellRow>
@@ -175,12 +161,10 @@ class Board extends React.Component {
 		});
 	}
 
-	createCellObj(key, cellID, x, y) {
+	createCellObj(key, x, y) {
 		return (
 			<Cell
 				key={key}
-				cellID={cellID}
-				ref={'cell_' + x + '_' + y}
 				onClick={() => this.handleClick(x, y)}
 				className={this.cellIsAlive(x, y) ? 'cell_alive' : 'cell_dead'}/>
 				);

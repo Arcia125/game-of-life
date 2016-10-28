@@ -1,15 +1,11 @@
 // menu.js
 
-const React = require('react');
+import React from 'react';
 
 const Menu = (props) => {
-	let classes = [];
-	if (props.className) {
-		classes.push(props.className);
-	}
-	classes.push('menu');
+
 	return (
-		<div className={classes.join(' ')}>
+		<div className={'menu ' + props.className}>
 			{props.children}
 		</div>
 		);

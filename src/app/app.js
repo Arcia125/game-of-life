@@ -6,7 +6,7 @@ import Board from './components/board';
 
 export default class App extends React.Component {
 	componentWillMount() {
-		let width = window.innerWidth;
+		const width = window.innerWidth;
 		let boardSize;
 		if (width > 1024) {
 			boardSize = 60;
@@ -26,16 +26,14 @@ export default class App extends React.Component {
 		}
 	}
 
-	createInterval() {
-		// creates a timer that adds one to generation every interval
-		// sets interval delay to this.state.speed
-		let intervalID = setInterval(this.addToGeneration.bind(this), this.state.speed);
-		return intervalID;
+	startAnimation() {
+		// creates a timer that adds one to generation every animation frame
+		return requestAnimationFrame(this.getNextFrame.bind(this));
 	}
 
-	removeInterval() {
-		// clears the interval using hte id stored in this.state.interval
-		clearInterval(this.state.interval);
+	cancelAnimation() {
+		// cancels the animation frame from the state.
+		cancelAnimationFrame(this.state.interval);
 		return null;
 	}
 
@@ -43,15 +41,16 @@ export default class App extends React.Component {
 		// starts a timer that adds to generation and store its id in state
 		// whenever the element is created
 		this.setState({
-			interval: this.createInterval()
+			interval: this.startAnimation()
 		})
 	}
 
-	addToGeneration() {
+	getNextFrame() {
 		// adds one to the generation state variable
 		this.setState({
-			generation: this.state.generation + 1
-		})
+			generation: this.state.generation + 1,
+			interval: requestAnimationFrame(this.getNextFrame.bind(this)),
+		});
 	}
 
 	handleRun() {
@@ -60,7 +59,7 @@ export default class App extends React.Component {
 		if(this.state.running === false) {
 			this.setState({
 				running: true,
-				interval: this.createInterval()
+				interval: this.startAnimation()
 			});
 		} else {
 			return false;
@@ -73,7 +72,7 @@ export default class App extends React.Component {
 		if(this.state.running === true) {
 			this.setState({
 				running: false,
-				interval: this.removeInterval()
+				interval: this.cancelAnimation()
 			});
 		}else {
 			return false;
@@ -81,11 +80,11 @@ export default class App extends React.Component {
 	}
 
 	handleClear() {
-		this.removeInterval();
+		this.cancelAnimation();
 		this.setState({
 			running: false,
 			generation: 0,
-			interval: this.removeInterval(),
+			interval: this.cancelAnimation(),
 			clear: true
 		});
 		setTimeout(() => {
@@ -95,11 +94,11 @@ export default class App extends React.Component {
 		}, 10);
 	}
 	handleRandom() {
-		this.removeInterval();
+		this.cancelAnimation();
 		this.setState({
 			running: false,
 			generation: 0,
-			interval: this.removeInterval(),
+			interval: this.cancelAnimation(),
 			randomize: true
 		});
 		setTimeout(() => {
@@ -158,16 +157,16 @@ export default class App extends React.Component {
 					<Button onClick={() => this.handleClear()} className='clear-button' >Clear</Button>
 				</Menu>
 				<Board
-				size={this.state.size}
-				density={this.state.density}
-				clear={this.state.clear}
-				randomize={this.state.randomize}
-				generation={this.state.generation}
+					size={this.state.size}
+					density={this.state.density}
+					clear={this.state.clear}
+					randomize={this.state.randomize}
+					generation={this.state.generation}
 				 />
 				 <Menu className='bottom-menu'>
 				 	<Button onClick={() => this.handleRandom()} className='random-button' >Randomize</Button>
 				 	<div className='generation-counter'>
-					Generation: {this.state.generation}
+						Generation: {this.state.generation}
 					</div>
 				 </Menu>
 			</div>
